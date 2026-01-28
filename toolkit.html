@@ -3,171 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Learning Hub - Future Interface</title>
+    <title>AI Study Toolkit V2.0</title>
     <style>
-        :root { 
-            --accent: #38bdf8; 
-            --text: #f8fafc; 
-        }
-        body { 
-            margin: 0; 
-            background: #000; 
-            color: var(--text); 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
-            overflow: hidden; /* 防止出现滚动条 */
-        }
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f8fafc; --success: #4ade80; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; padding: 20px; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 0 auto; }
         
-        /* 3D 背景层 */
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1; /* 放在最底层 */
-        }
+        /* Header */
+        header { text-align: center; margin-bottom: 40px; }
+        h1 { color: var(--accent); margin-bottom: 10px; font-size: 2.5rem; }
+        .subtitle { color: #94a3b8; }
 
-        /* 内容层 */
-        .content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            width: 100%;
-            z-index: 10;
-            pointer-events: none; /* 让鼠标事件穿透到背景 */
-        }
-
-        h1 { 
-            font-size: 4rem; 
-            margin-bottom: 10px; 
-            color: #fff; 
-            text-shadow: 0 0 20px var(--accent);
-            letter-spacing: 2px;
-        }
-        
-        .subtitle {
-            font-size: 1.5rem;
-            color: #94a3b8;
-            margin-bottom: 50px;
-        }
-
-        .action-btn { 
-            pointer-events: auto; /* 让按钮可以点击 */
-            background: rgba(56, 189, 248, 0.1); 
-            border: 2px solid var(--accent);
-            color: var(--accent); 
-            padding: 15px 50px; 
-            border-radius: 50px; 
-            text-decoration: none; 
-            font-weight: bold; 
-            font-size: 1.2rem;
+        /* Filter Buttons */
+        .filter-container { text-align: center; margin-bottom: 30px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        .filter-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #cbd5e1;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
             transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            backdrop-filter: blur(5px);
+        }
+        .filter-btn:hover, .filter-btn.active { background: var(--accent); color: #0f172a; font-weight: bold; }
+
+        /* Grid Layout */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        
+        /* Card Style */
+        .tool-card { background: var(--card); padding: 25px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
+        .tool-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        
+        .tag { font-size: 0.75rem; font-weight: bold; padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
+        .tag.math { background: #f43f5e; color: white; }
+        .tag.english { background: #3b82f6; color: white; }
+        .tag.science { background: #10b981; color: white; }
+        .tag.writing { background: #f59e0b; color: white; }
+        .tag.code { background: #8b5cf6; color: white; }
+
+        h3 { margin: 5px 0 10px 0; font-size: 1.3rem; }
+        p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 15px; }
+
+        /* Prompt Box */
+        .prompt-box { 
+            background: rgba(0,0,0,0.3); 
+            padding: 15px; 
+            border-radius: 8px; 
+            font-size: 0.85rem; 
+            color: #e2e8f0; 
+            border-left: 3px solid var(--accent);
+            font-family: monospace;
+            margin-bottom: 15px;
+            height: 100px; 
+            overflow-y: auto;
         }
 
-        .action-btn:hover { 
+        /* Copy Button */
+        .copy-btn { 
             background: var(--accent); 
-            color: #000;
-            box-shadow: 0 0 30px var(--accent); 
+            color: #0f172a; 
+            border: none; 
+            padding: 10px 15px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            width: 100%; 
+            transition: 0.2s; 
         }
-
-        .footer {
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
-            text-align: center;
-            color: #475569;
-            font-size: 0.8rem;
-        }
+        .copy-btn:hover { opacity: 0.9; }
+        .copy-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
+    <div class="container">
+        <a href="index.html" style="color: var(--accent); text-decoration: none; font-weight: bold;">← Back Home</a>
+        
+        <header>
+            <h1>⚡ AI Study Toolkit</h1>
+            <p class="subtitle">Select a subject to find the perfect prompt.</p>
+        </header>
 
-    <div id="canvas-container"></div>
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filterSelection('all')">All</button>
+            <button class="filter-btn" onclick="filterSelection('english')">English</button>
+            <button class="filter-btn" onclick="filterSelection('math')">Math</button>
+            <button class="filter-btn" onclick="filterSelection('science')">Science</button>
+            <button class="filter-btn" onclick="filterSelection('writing')">Writing</button>
+            <button class="filter-btn" onclick="filterSelection('code')">Coding</button>
+        </div>
 
-    <div class="content">
-        <h1>AI NEXUS</h1>
-        <p class="subtitle">Access the Ultimate Student Toolkit</p>
-        <a href="toolkit.html" class="action-btn">Initialize System</a>
+        <div class="grid">
+            
+            <div class="tool-card english">
+                <span class="tag english">English</span>
+                <h3>Grammar Coach</h3>
+                <p>Explains grammar rules simply.</p>
+                <div class="prompt-box" id="p1">"Act as an English tutor. Translate this text to my language, highlight 3 advanced vocabulary words, and explain the grammar structure of the second sentence."</div>
+                <button class="copy-btn" onclick="copyText('p1')">Copy Prompt</button>
+            </div>
+
+            <div class="tool-card math">
+                <span class="tag math">Math</span>
+                <h3>Socratic Math Tutor</h3>
+                <p>Guides you without giving the answer.</p>
+                <div class="prompt-box" id="p2">"I have a math problem. DO NOT give me the solution. Instead, ask me 3 guiding questions to help me solve it myself. Here is the problem: [Insert Problem]"</div>
+                <button class="copy-btn" onclick="copyText('p2')">Copy Prompt</button>
+            </div>
+
+            <div class="tool-card science">
+                <span class="tag science">Science</span>
+                <h3>The Analogy King</h3>
+                <p>Explains physics using real-world examples.</p>
+                <div class="prompt-box" id="p3">"Explain the concept of [Insert Concept] using an analogy related to Basketball or Video Games so a 15-year-old can understand it instantly."</div>
+                <button class="copy-btn" onclick="copyText('p3')">Copy Prompt</button>
+            </div>
+
+            <div class="tool-card writing">
+                <span class="tag writing">Writing</span>
+                <h3>Essay Outliner</h3>
+                <p>Get a structure for your essay instantly.</p>
+                <div class="prompt-box" id="p4">"I need to write an essay about [Topic]. Create a detailed outline with an Intro, 3 Body Paragraphs (with arguments), and a Conclusion."</div>
+                <button class="copy-btn" onclick="copyText('p4')">Copy Prompt</button>
+            </div>
+
+            <div class="tool-card code">
+                <span class="tag code">Coding</span>
+                <h3>Code Debugger</h3>
+                <p>Finds the bug and explains the fix.</p>
+                <div class="prompt-box" id="p5">"Here is my code. It has a bug. Identify the error, explain WHY it is wrong, and show me the corrected version."</div>
+                <button class="copy-btn" onclick="copyText('p5')">Copy Prompt</button>
+            </div>
+
+            <div class="tool-card writing">
+                <span class="tag writing">History</span>
+                <h3>Time Traveler Chat</h3>
+                <p>Interview historical figures.</p>
+                <div class="prompt-box" id="p6">"Act as [Historical Figure]. I will ask you questions about your life and achievements. Answer in the first person."</div>
+                <button class="copy-btn" onclick="copyText('p6')">Copy Prompt</button>
+            </div>
+
+            <div class="tool-card science">
+                <span class="tag science">Study</span>
+                <h3>Quiz Master</h3>
+                <p>Test your knowledge.</p>
+                <div class="prompt-box" id="p7">"Create a 5-question multiple choice quiz about [Topic]. Don't show the answers immediately. Wait for my response."</div>
+                <button class="copy-btn" onclick="copyText('p7')">Copy Prompt</button>
+            </div>
+
+             <div class="tool-card english">
+                <span class="tag english">Language</span>
+                <h3>Text Polisher</h3>
+                <p>Make your writing professional.</p>
+                <div class="prompt-box" id="p8">"Rewrite this text to sound more professional and polite. Fix any grammar errors."</div>
+                <button class="copy-btn" onclick="copyText('p8')">Copy Prompt</button>
+            </div>
+
+        </div>
     </div>
 
-    <div class="footer">Built with Three.js | 2026</div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
     <script>
-        // 1. 初始化场景
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true }); // 背景透明
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-        // 2. 创建粒子
-        const geometry = new THREE.BufferGeometry();
-        const particlesCount = 1200; // 粒子数量
-        const posArray = new Float32Array(particlesCount * 3);
-
-        for(let i = 0; i < particlesCount * 3; i++) {
-            // 随机分布在 -5 到 5 的空间内
-            posArray[i] = (Math.random() - 0.5) * 15; 
+        function copyText(id) {
+            const text = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(text);
+            alert("Prompt Copied! 📋 Now paste it into ChatGPT.");
         }
 
-        geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        function filterSelection(category) {
+            var cards = document.getElementsByClassName("tool-card");
+            var btns = document.getElementsByClassName("filter-btn");
 
-        // 粒子材质
-        const material = new THREE.PointsMaterial({
-            size: 0.02,
-            color: 0x38bdf8, // 科技蓝
-            transparent: true,
-            opacity: 0.8
-        });
+            for (var i = 0; i < btns.length; i++) {
+                btns[i].classList.remove("active");
+                if(btns[i].innerText.toLowerCase() === category || (category === 'all' && btns[i].innerText === 'All')) {
+                    btns[i].classList.add("active");
+                }
+            }
 
-        // 粒子网格
-        const particlesMesh = new THREE.Points(geometry, material);
-        scene.add(particlesMesh);
-
-        camera.position.z = 3;
-
-        // 3. 鼠标交互
-        let mouseX = 0;
-        let mouseY = 0;
-
-        document.addEventListener('mousemove', (event) => {
-            mouseX = event.clientX / window.innerWidth - 0.5;
-            mouseY = event.clientY / window.innerHeight - 0.5;
-        });
-
-        // 4. 动画循环
-        const clock = new THREE.Clock();
-
-        function animate() {
-            const elapsedTime = clock.getElapsedTime();
-
-            // 让粒子缓慢旋转
-            particlesMesh.rotation.y = elapsedTime * 0.05;
-            particlesMesh.rotation.x = elapsedTime * 0.02;
-
-            // 让粒子根据鼠标移动
-            particlesMesh.rotation.y += mouseX * 0.5;
-            particlesMesh.rotation.x += mouseY * 0.5;
-
-            renderer.render(scene, camera);
-            window.requestAnimationFrame(animate);
+            for (var i = 0; i < cards.length; i++) {
+                if (category == "all") {
+                    cards[i].style.display = "block";
+                } else {
+                    if (cards[i].classList.contains(category)) {
+                        cards[i].style.display = "block";
+                    } else {
+                        cards[i].style.display = "none";
+                    }
+                }
+            }
         }
-
-        animate();
-
-        // 窗口大小改变时自动调整
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
     </script>
 </body>
 </html>
