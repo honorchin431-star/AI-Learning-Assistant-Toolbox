@@ -13,7 +13,7 @@
             color: var(--text); 
             font-family: 'Segoe UI', sans-serif; 
             overflow: hidden;
-            /* 关键修改：使用 Flex 布局直接居中，不靠 absolute 定位 */
+            /* Flexbox layout to center everything perfectly */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -21,15 +21,15 @@
             height: 100vh;
         }
 
-        /* 背景层：强制固定在后面 */
+        /* Background Layer: Canvas stays behind everything */
         canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1; /* 永远在最后 */
-            pointer-events: none; /* 永远不接客（不响应鼠标） */
+            z-index: -1; /* Always at the bottom */
+            pointer-events: none; /* Mouse passes through to the button */
         }
 
         h1 { 
@@ -39,6 +39,7 @@
             text-shadow: 0 0 25px var(--accent);
             text-align: center;
             z-index: 10;
+            letter-spacing: 2px;
         }
         
         .subtitle {
@@ -51,11 +52,11 @@
             z-index: 10;
         }
 
-        /* 按钮：极其暴力的层级设置 */
+        /* Button Style: High Z-Index to ensure it's clickable */
         .action-btn { 
-            z-index: 99999; /* 层级设为最高 */
+            z-index: 99999; 
             position: relative;
-            background: rgba(0,0,0,0.8); /*稍微深一点的背景，防止字看不清*/
+            background: rgba(0,0,0,0.8); 
             border: 2px solid var(--accent);
             color: var(--accent); 
             padding: 20px 60px; 
@@ -82,6 +83,7 @@
             bottom: 20px;
             color: #475569;
             font-size: 0.8rem;
+            letter-spacing: 1px;
         }
     </style>
 </head>
@@ -101,35 +103,41 @@
         const renderer = new THREE.WebGLRenderer({ alpha: true });
         
         renderer.setSize(window.innerWidth, window.innerHeight);
-        // 直接把 canvas 放在 body 最前面，配合 z-index: -1 确保它沉底
         document.body.appendChild(renderer.domElement);
 
+        // Particle System Setup
         const geometry = new THREE.BufferGeometry();
         const particlesCount = 1000;
         const posArray = new Float32Array(particlesCount * 3);
+        
         for(let i = 0; i < particlesCount * 3; i++) {
             posArray[i] = (Math.random() - 0.5) * 15;
         }
+        
         geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
         const material = new THREE.PointsMaterial({
             size: 0.03,
             color: 0x38bdf8,
             transparent: true,
             opacity: 0.8
         });
+        
         const particlesMesh = new THREE.Points(geometry, material);
         scene.add(particlesMesh);
 
         camera.position.z = 3;
 
+        // Mouse Interaction
         let mouseX = 0;
         let mouseY = 0;
-        // 只有当鼠标在 canvas 区域移动时才捕获，防止干扰按钮（虽然 pointer-events 已经防住了）
+        
         document.addEventListener('mousemove', (event) => {
             mouseX = event.clientX / window.innerWidth - 0.5;
             mouseY = event.clientY / window.innerHeight - 0.5;
         });
 
+        // Animation Loop
         const clock = new THREE.Clock();
         function animate() {
             const elapsedTime = clock.getElapsedTime();
@@ -140,6 +148,7 @@
         }
         animate();
 
+        // Responsive Resizing
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
