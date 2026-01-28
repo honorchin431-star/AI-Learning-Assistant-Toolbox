@@ -3,68 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Learning Assistant - Level Up</title>
+    <title>AI Learning Hub - Future Interface</title>
     <style>
         :root { 
-            --bg: #0f172a; 
-            --card: #1e293b; 
             --accent: #38bdf8; 
             --text: #f8fafc; 
-            --mamba-gold: #fbbf24; 
         }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
-        .hero { 
-            text-align: center; 
-            padding: 120px 20px; 
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 80%); 
-            min-height: 100vh; /* 让背景铺满整个屏幕 */
-            box-sizing: border-box;
+        body { 
+            margin: 0; 
+            background: #000; 
+            color: var(--text); 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            overflow: hidden; 
         }
-        h1 { font-size: 3.5rem; margin-bottom: 20px; color: var(--accent); letter-spacing: -1px; }
-        .mission { max-width: 600px; margin: 0 auto 50px; font-size: 1.25rem; color: #94a3b8; font-weight: 300; }
         
-        .start-btn { 
-            background: var(--accent); 
-            color: #0f172a; 
-            padding: 16px 45px; 
+        /* 1. 3D 背景层 (放在最底层 -1) */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; 
+        }
+
+        /* 2. 内容层 (放在中间层 10) */
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%;
+            z-index: 10;
+        }
+
+        h1 { 
+            font-size: 4rem; 
+            margin-bottom: 10px; 
+            color: #fff; 
+            text-shadow: 0 0 20px var(--accent);
+            letter-spacing: 2px;
+            pointer-events: none; /* 让鼠标经过文字时不变成光标 */
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            margin-bottom: 60px; /* 增加一点距离，防止误触 */
+            pointer-events: none;
+        }
+
+        /* 3. 按钮 (放在最顶层 9999，绝对能点！) */
+        .action-btn { 
+            position: relative; /* 确保 z-index 生效 */
+            z-index: 9999; 
+            background: rgba(56, 189, 248, 0.1); 
+            border: 2px solid var(--accent);
+            color: var(--accent); 
+            padding: 15px 50px; 
             border-radius: 50px; 
             text-decoration: none; 
-            font-weight: 800; 
-            font-size: 1.1rem;
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+            font-weight: bold; 
+            font-size: 1.2rem;
             transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            backdrop-filter: blur(5px);
+            cursor: pointer; /* 强制显示手型光标 */
             display: inline-block;
-            text-transform: uppercase; /* 字母自动大写 */
-            letter-spacing: 1px;
         }
-        .start-btn:hover { 
-            transform: translateY(-5px) scale(1.05); 
-            box-shadow: 0 0 40px rgba(56, 189, 248, 0.7); 
+
+        .action-btn:hover { 
+            background: var(--accent); 
+            color: #000;
+            box-shadow: 0 0 30px var(--accent); 
+            transform: scale(1.05); /* 悬停时稍微放大 */
         }
-        
-        .quote { margin-top: 80px; font-style: italic; color: var(--mamba-gold); opacity: 0.9; }
-        .footer-text { margin-top: 50px; font-size: 0.8rem; color: #475569; }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: #475569;
+            font-size: 0.8rem;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
-    <div class="hero">
-        <h1>AI Learning Assistant</h1>
-        <p class="mission">
-            "Study smarter, grow stronger." <br><br>
-            This toolkit is designed for students who want to excel. 
-            AI shouldn't just do your homework; it should be your personal coach to help you master difficult concepts.
-        </p>
-        
-        <a href="toolkit.html" class="start-btn">Enter Toolbox →</a>
-        
-        <div class="quote">
-            <p>"Everything negative - pressure, challenges - is all an opportunity for me to rise."</p>
-            <p style="font-size: 0.9rem; margin-top: 5px;">— Kobe Bryant</p>
-        </div>
 
-        <div class="footer-text">
-            Built by a Student Developer | 2026
-        </div>
+    <div id="canvas-container"></div>
+
+    <div class="content">
+        <h1>AI NEXUS</h1>
+        <p class="subtitle">Access the Ultimate Student Toolkit</p>
+        <a href="toolkit.html" class="action-btn">Initialize System</a>
     </div>
+
+    <div class="footer">Built with Three.js | 2026</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const geometry = new THREE.BufferGeometry();
+        const particlesCount = 1200;
+        const posArray = new Float32Array(particlesCount * 3);
+
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 15; 
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.02,
+            color: 0x38bdf8,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        const particlesMesh = new THREE.Points(geometry, material);
+        scene.add(particlesMesh);
+
+        camera.position.z = 3;
+
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (event) => {
+            mouseX = event.clientX / window.innerWidth - 0.5;
+            mouseY = event.clientY / window.innerHeight - 0.5;
+        });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            const elapsedTime = clock.getElapsedTime();
+            particlesMesh.rotation.y = elapsedTime * 0.05;
+            particlesMesh.rotation.x = elapsedTime * 0.02;
+            particlesMesh.rotation.y += mouseX * 0.5;
+            particlesMesh.rotation.x += mouseY * 0.5;
+            renderer.render(scene, camera);
+            window.requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
