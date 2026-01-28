@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Learning Assistant - Helping You Grow</title>
+    <title>AI Learning Assistant - Level Up</title>
     <style>
         :root { 
             --bg: #0f172a; 
@@ -13,41 +13,58 @@
             --mamba-gold: #fbbf24; 
         }
         body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6; }
-        .hero { text-align: center; padding: 100px 20px; background: radial-gradient(circle at center, #1e293b 0%, #0f172a 80%); }
-        h1 { font-size: 2.8rem; margin-bottom: 20px; color: var(--accent); }
-        .mission { max-width: 650px; margin: 0 auto 40px; font-size: 1.2rem; color: #94a3b8; }
-        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; text-align: center; }
+        .hero { 
+            text-align: center; 
+            padding: 120px 20px; 
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 80%); 
+            min-height: 100vh; /* 让背景铺满整个屏幕 */
+            box-sizing: border-box;
+        }
+        h1 { font-size: 3.5rem; margin-bottom: 20px; color: var(--accent); letter-spacing: -1px; }
+        .mission { max-width: 600px; margin: 0 auto 50px; font-size: 1.25rem; color: #94a3b8; font-weight: 300; }
+        
         .start-btn { 
             background: var(--accent); 
             color: #0f172a; 
-            padding: 15px 40px; 
-            border-radius: 30px; 
+            padding: 16px 45px; 
+            border-radius: 50px; 
             text-decoration: none; 
-            font-weight: bold; 
+            font-weight: 800; 
             font-size: 1.1rem;
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
             transition: 0.3s;
             display: inline-block;
+            text-transform: uppercase; /* 字母自动大写 */
+            letter-spacing: 1px;
         }
-        .start-btn:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(56, 189, 248, 0.6); }
-        .quote { margin-top: 60px; font-style: italic; color: var(--mamba-gold); border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; }
+        .start-btn:hover { 
+            transform: translateY(-5px) scale(1.05); 
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.7); 
+        }
+        
+        .quote { margin-top: 80px; font-style: italic; color: var(--mamba-gold); opacity: 0.9; }
+        .footer-text { margin-top: 50px; font-size: 0.8rem; color: #475569; }
     </style>
 </head>
 <body>
     <div class="hero">
         <h1>AI Learning Assistant</h1>
         <p class="mission">
-            "Study smarter, grow together." <br>
-            这是一个专为想要变强的同学设计的工具箱。我不希望 AI 只是帮你偷懒，我希望它能成为你的私人教练，帮你攻克难题。
+            "Study smarter, grow stronger." <br><br>
+            This toolkit is designed for students who want to excel. 
+            AI shouldn't just do your homework; it should be your personal coach to help you master difficult concepts.
         </p>
-        <a href="toolkit.html" class="start-btn">进入工具箱 (Enter Toolbox) →</a>
+        
+        <a href="toolkit.html" class="start-btn">Enter Toolbox →</a>
         
         <div class="quote">
-            <p>"Everything negative - pressure, challenges - is all an opportunity for me to rise." — Kobe Bryant</p>
+            <p>"Everything negative - pressure, challenges - is all an opportunity for me to rise."</p>
+            <p style="font-size: 0.9rem; margin-top: 5px;">— Kobe Bryant</p>
+        </div>
+
+        <div class="footer-text">
+            Built by a Student Developer | 2026
         </div>
     </div>
-    <footer style="text-align: center; padding: 40px; font-size: 0.8rem; color: #64748b;">
-        Built with ❤️ to help students | 2026
-    </footer>
 </body>
 </html>
