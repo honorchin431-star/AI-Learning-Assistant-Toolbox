@@ -3,59 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Study Toolkit V2.0</title>
+    <title>IGCSE Study Toolkit - Ultimate Edition</title>
     <style>
-        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f8fafc; --success: #4ade80; }
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f8fafc; --success: #4ade80; --warning: #fbbf24; --danger: #f43f5e; }
         body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; padding: 20px; line-height: 1.6; }
-        .container { max-width: 1000px; margin: 0 auto; }
+        .container { max-width: 1200px; margin: 0 auto; }
         
         /* Header */
         header { text-align: center; margin-bottom: 40px; }
-        h1 { color: var(--accent); margin-bottom: 10px; font-size: 2.5rem; }
-        .subtitle { color: #94a3b8; }
+        h1 { color: var(--accent); margin-bottom: 10px; font-size: 2.5rem; letter-spacing: -1px; }
+        .subtitle { color: #94a3b8; font-size: 1.1rem; }
 
-        /* Filter Buttons */
-        .filter-container { text-align: center; margin-bottom: 30px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+        /* Filter Buttons - 优化了样式 */
+        .filter-container { text-align: center; margin-bottom: 40px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
         .filter-btn {
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
             color: #cbd5e1;
-            padding: 8px 20px;
-            border-radius: 20px;
+            padding: 10px 25px;
+            border-radius: 50px;
             cursor: pointer;
             transition: 0.3s;
+            font-weight: 500;
         }
-        .filter-btn:hover, .filter-btn.active { background: var(--accent); color: #0f172a; font-weight: bold; }
+        .filter-btn:hover, .filter-btn.active { 
+            background: var(--accent); 
+            color: #0f172a; 
+            font-weight: bold; 
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+            transform: translateY(-2px);
+        }
 
         /* Grid Layout */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
         
         /* Card Style */
-        .tool-card { background: var(--card); padding: 25px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
-        .tool-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .tool-card { background: var(--card); padding: 25px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; position: relative; overflow: hidden; }
+        .tool-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         
-        .tag { font-size: 0.75rem; font-weight: bold; padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
-        .tag.math { background: #f43f5e; color: white; }
-        .tag.english { background: #3b82f6; color: white; }
-        .tag.science { background: #10b981; color: white; }
-        .tag.writing { background: #f59e0b; color: white; }
-        .tag.code { background: #8b5cf6; color: white; }
+        /* Tags for Subjects */
+        .tag { font-size: 0.7rem; font-weight: 800; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .tag.stem { background: linear-gradient(45deg, #3b82f6, #2dd4bf); color: white; } /* 理科 */
+        .tag.lang { background: linear-gradient(45deg, #f43f5e, #fda4af); color: white; } /* 语言 */
+        .tag.hum { background: linear-gradient(45deg, #f59e0b, #fbbf24); color: #000; } /* 人文 */
+        .tag.biz { background: linear-gradient(45deg, #8b5cf6, #d8b4fe); color: white; } /* 商科 */
+        .tag.tech { background: linear-gradient(45deg, #10b981, #6ee7b7); color: #000; } /* 科技 */
 
-        h3 { margin: 5px 0 10px 0; font-size: 1.3rem; }
-        p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 15px; }
+        h3 { margin: 0 0 10px 0; font-size: 1.4rem; }
+        p { color: #94a3b8; font-size: 0.95rem; margin-bottom: 20px; min-height: 45px; }
 
         /* Prompt Box */
         .prompt-box { 
-            background: rgba(0,0,0,0.3); 
+            background: rgba(0,0,0,0.4); 
             padding: 15px; 
-            border-radius: 8px; 
+            border-radius: 10px; 
             font-size: 0.85rem; 
             color: #e2e8f0; 
-            border-left: 3px solid var(--accent);
-            font-family: monospace;
-            margin-bottom: 15px;
-            height: 100px; 
+            border-left: 4px solid var(--accent);
+            font-family: 'Consolas', monospace;
+            margin-bottom: 20px;
+            height: 110px; 
             overflow-y: auto;
+            line-height: 1.5;
         }
 
         /* Copy Button */
@@ -63,99 +72,127 @@
             background: var(--accent); 
             color: #0f172a; 
             border: none; 
-            padding: 10px 15px; 
-            border-radius: 8px; 
+            padding: 12px; 
+            border-radius: 10px; 
             cursor: pointer; 
             font-weight: bold; 
             width: 100%; 
             transition: 0.2s; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        .copy-btn:hover { opacity: 0.9; }
+        .copy-btn:hover { opacity: 0.9; transform: scale(1.02); }
         .copy-btn:active { transform: scale(0.98); }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="index.html" style="color: var(--accent); text-decoration: none; font-weight: bold;">← Back Home</a>
+        <a href="index.html" style="color: var(--accent); text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px;">← Back to Hub</a>
         
         <header>
-            <h1>⚡ AI Study Toolkit</h1>
-            <p class="subtitle">Select a subject to find the perfect prompt.</p>
+            <h1>🎓 IGCSE Toolkit</h1>
+            <p class="subtitle">Year 7 - Year 11 Study Companion. Select a category:</p>
         </header>
 
         <div class="filter-container">
-            <button class="filter-btn active" onclick="filterSelection('all')">All</button>
-            <button class="filter-btn" onclick="filterSelection('english')">English</button>
-            <button class="filter-btn" onclick="filterSelection('math')">Math</button>
-            <button class="filter-btn" onclick="filterSelection('science')">Science</button>
-            <button class="filter-btn" onclick="filterSelection('writing')">Writing</button>
-            <button class="filter-btn" onclick="filterSelection('code')">Coding</button>
+            <button class="filter-btn active" onclick="filterSelection('all')">All Subjects</button>
+            <button class="filter-btn" onclick="filterSelection('stem')">🧪 Science & Math</button>
+            <button class="filter-btn" onclick="filterSelection('lang')">🗣️ Languages</button>
+            <button class="filter-btn" onclick="filterSelection('hum')">🌍 Humanities</button>
+            <button class="filter-btn" onclick="filterSelection('biz')">💼 Business</button>
+            <button class="filter-btn" onclick="filterSelection('tech')">💻 Tech</button>
         </div>
 
         <div class="grid">
             
-            <div class="tool-card english">
-                <span class="tag english">English</span>
-                <h3>Grammar Coach</h3>
-                <p>Explains grammar rules simply.</p>
-                <div class="prompt-box" id="p1">"Act as an English tutor. Translate this text to my language, highlight 3 advanced vocabulary words, and explain the grammar structure of the second sentence."</div>
-                <button class="copy-btn" onclick="copyText('p1')">Copy Prompt</button>
+            <div class="tool-card stem">
+                <span class="tag stem">Math</span>
+                <h3>Step-by-Step Solver</h3>
+                <p>Perfect for Algebra, Geometry, and Calculus problems.</p>
+                <div class="prompt-box" id="p_math">"I have a math problem from IGCSE Past Year. DO NOT just give the answer. Instead, guide me step-by-step on how to solve it. Here is the question: [Insert Question]"</div>
+                <button class="copy-btn" onclick="copyText('p_math')">Copy Prompt</button>
             </div>
 
-            <div class="tool-card math">
-                <span class="tag math">Math</span>
-                <h3>Socratic Math Tutor</h3>
-                <p>Guides you without giving the answer.</p>
-                <div class="prompt-box" id="p2">"I have a math problem. DO NOT give me the solution. Instead, ask me 3 guiding questions to help me solve it myself. Here is the problem: [Insert Problem]"</div>
-                <button class="copy-btn" onclick="copyText('p2')">Copy Prompt</button>
+            <div class="tool-card stem">
+                <span class="tag stem">Biology</span>
+                <h3>Bio Process Visualizer</h3>
+                <p>Understand complex processes like Photosynthesis or Digestion.</p>
+                <div class="prompt-box" id="p_bio">"Explain the process of [Insert Topic, e.g., Mitosis] in simple steps. Use bullet points and analogies to help me memorize it for my exam."</div>
+                <button class="copy-btn" onclick="copyText('p_bio')">Copy Prompt</button>
             </div>
 
-            <div class="tool-card science">
-                <span class="tag science">Science</span>
-                <h3>The Analogy King</h3>
-                <p>Explains physics using real-world examples.</p>
-                <div class="prompt-box" id="p3">"Explain the concept of [Insert Concept] using an analogy related to Basketball or Video Games so a 15-year-old can understand it instantly."</div>
-                <button class="copy-btn" onclick="copyText('p3')">Copy Prompt</button>
+            <div class="tool-card stem">
+                <span class="tag stem">Chemistry</span>
+                <h3>Reaction Explainer</h3>
+                <p>Understand bonding, electrolysis, and periodic table trends.</p>
+                <div class="prompt-box" id="p_chem">"Act as a Chemistry tutor. Explain the concept of [Insert Topic, e.g., Ionic Bonding]. Tell me what happens to the electrons and provide a real-life example."</div>
+                <button class="copy-btn" onclick="copyText('p_chem')">Copy Prompt</button>
             </div>
 
-            <div class="tool-card writing">
-                <span class="tag writing">Writing</span>
-                <h3>Essay Outliner</h3>
-                <p>Get a structure for your essay instantly.</p>
-                <div class="prompt-box" id="p4">"I need to write an essay about [Topic]. Create a detailed outline with an Intro, 3 Body Paragraphs (with arguments), and a Conclusion."</div>
-                <button class="copy-btn" onclick="copyText('p4')">Copy Prompt</button>
+            <div class="tool-card stem">
+                <span class="tag stem">Physics</span>
+                <h3>Formula Master</h3>
+                <p>Don't just memorize formulas, understand how they work.</p>
+                <div class="prompt-box" id="p_phy">"I need to understand the formula for [Insert Topic, e.g., Kinetic Energy]. Explain what each variable means and give me a practice question to test my understanding."</div>
+                <button class="copy-btn" onclick="copyText('p_phy')">Copy Prompt</button>
             </div>
 
-            <div class="tool-card code">
-                <span class="tag code">Coding</span>
-                <h3>Code Debugger</h3>
-                <p>Finds the bug and explains the fix.</p>
-                <div class="prompt-box" id="p5">"Here is my code. It has a bug. Identify the error, explain WHY it is wrong, and show me the corrected version."</div>
-                <button class="copy-btn" onclick="copyText('p5')">Copy Prompt</button>
+            <div class="tool-card lang">
+                <span class="tag lang">English (First/Second)</span>
+                <h3>Essay Upgrader</h3>
+                <p>Improve your vocabulary and sentence structure instantly.</p>
+                <div class="prompt-box" id="p_eng">"Here is a paragraph I wrote for my English essay. Rewrite it to make it sound more sophisticated (IGCSE Band 1 level), and highlight the changes you made."</div>
+                <button class="copy-btn" onclick="copyText('p_eng')">Copy Prompt</button>
             </div>
 
-            <div class="tool-card writing">
-                <span class="tag writing">History</span>
-                <h3>Time Traveler Chat</h3>
-                <p>Interview historical figures.</p>
-                <div class="prompt-box" id="p6">"Act as [Historical Figure]. I will ask you questions about your life and achievements. Answer in the first person."</div>
-                <button class="copy-btn" onclick="copyText('p6')">Copy Prompt</button>
+            <div class="tool-card lang">
+                <span class="tag lang">Malay / Chinese</span>
+                <h3>Oral Exam Partner</h3>
+                <p>Practice conversation for your Oral assessment.</p>
+                <div class="prompt-box" id="p_lang">"Act as a strict language examiner for [Malay/Chinese]. I want to practice for my oral exam. Ask me a question about 'Health/Environment', wait for my answer, and then correct my grammar."</div>
+                <button class="copy-btn" onclick="copyText('p_lang')">Copy Prompt</button>
             </div>
 
-            <div class="tool-card science">
-                <span class="tag science">Study</span>
-                <h3>Quiz Master</h3>
-                <p>Test your knowledge.</p>
-                <div class="prompt-box" id="p7">"Create a 5-question multiple choice quiz about [Topic]. Don't show the answers immediately. Wait for my response."</div>
-                <button class="copy-btn" onclick="copyText('p7')">Copy Prompt</button>
+            <div class="tool-card hum">
+                <span class="tag hum">History</span>
+                <h3>Source Analyzer</h3>
+                <p>Learn to analyze cartoons, text sources, and reliability.</p>
+                <div class="prompt-box" id="p_hist">"I have a history source about [Topic, e.g., Treaty of Versailles]. Help me analyze its Message, Purpose, and Reliability. What context should I include?"</div>
+                <button class="copy-btn" onclick="copyText('p_hist')">Copy Prompt</button>
             </div>
 
-             <div class="tool-card english">
-                <span class="tag english">Language</span>
-                <h3>Text Polisher</h3>
-                <p>Make your writing professional.</p>
-                <div class="prompt-box" id="p8">"Rewrite this text to sound more professional and polite. Fix any grammar errors."</div>
-                <button class="copy-btn" onclick="copyText('p8')">Copy Prompt</button>
+            <div class="tool-card hum">
+                <span class="tag hum">Geography</span>
+                <h3>Case Study Helper</h3>
+                <p>Memorize case studies for earthquakes, rivers, or population.</p>
+                <div class="prompt-box" id="p_geo">"I need a Case Study for [Topic, e.g., An Earthquake in an MEDC]. Provide the specific facts, figures, causes, impacts, and responses in a bullet-point list."</div>
+                <button class="copy-btn" onclick="copyText('p_geo')">Copy Prompt</button>
+            </div>
+
+            <div class="tool-card biz">
+                <span class="tag biz">Business Studies</span>
+                <h3>SWOT Analysis Pro</h3>
+                <p>Analyze business case studies with precision.</p>
+                <div class="prompt-box" id="p_biz">"I am analyzing a business case study about [Company Name]. Help me generate a SWOT analysis (Strengths, Weaknesses, Opportunities, Threats) based on this scenario."</div>
+                <button class="copy-btn" onclick="copyText('p_biz')">Copy Prompt</button>
+            </div>
+
+            <div class="tool-card biz">
+                <span class="tag biz">Economics</span>
+                <h3>Concept Simplifier</h3>
+                <p>Understand Demand, Supply, Inflation, and Policies.</p>
+                <div class="prompt-box" id="p_econ">"Explain the concept of [Topic, e.g., Price Elasticity of Demand] simply. Use a real-world example (like selling burgers) to help me understand."</div>
+                <button class="copy-btn" onclick="copyText('p_econ')">Copy Prompt</button>
+            </div>
+
+            <div class="tool-card tech">
+                <span class="tag tech">ICT / CS</span>
+                <h3>Code Debugger & Theory</h3>
+                <p>For Python, Java, or ICT Theory questions.</p>
+                <div class="prompt-box" id="p_ict">"I am learning [Python/VB]. Here is my code which is not working. Find the bug, explain why it's wrong, and show me the correct code."</div>
+                <button class="copy-btn" onclick="copyText('p_ict')">Copy Prompt</button>
             </div>
 
         </div>
@@ -165,20 +202,23 @@
         function copyText(id) {
             const text = document.getElementById(id).innerText;
             navigator.clipboard.writeText(text);
-            alert("Prompt Copied! 📋 Now paste it into ChatGPT.");
+            alert("Prompt Copied! 📋 Now paste it into ChatGPT/Claude.");
         }
 
         function filterSelection(category) {
             var cards = document.getElementsByClassName("tool-card");
             var btns = document.getElementsByClassName("filter-btn");
 
+            // Update active button
             for (var i = 0; i < btns.length; i++) {
                 btns[i].classList.remove("active");
-                if(btns[i].innerText.toLowerCase() === category || (category === 'all' && btns[i].innerText === 'All')) {
+                // Check matching button text or logic
+                if (btns[i].getAttribute('onclick').includes(category)) {
                     btns[i].classList.add("active");
                 }
             }
 
+            // Show/Hide cards
             for (var i = 0; i < cards.length; i++) {
                 if (category == "all") {
                     cards[i].style.display = "block";
