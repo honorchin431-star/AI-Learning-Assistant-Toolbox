@@ -3,65 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Learning Hub - Future Interface</title>
+    <title>AI NEXUS - System Interface</title>
     <style>
-        :root { 
-            --accent: #38bdf8; 
-            --text: #f8fafc; 
-        }
-        body { 
-            margin: 0; 
-            background: #000; 
-            color: var(--text); 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
-            overflow: hidden; 
-        }
+        :root { --accent: #38bdf8; --text: #f8fafc; }
+        body { margin: 0; background: #000; color: var(--text); font-family: 'Segoe UI', sans-serif; overflow: hidden; }
         
-        /* 1. 3D 背景层 (放在最底层 -1) */
+        /* 1. 修复：背景层完全“隐形” (不可点击) */
         #canvas-container {
             position: fixed;
-            top: 0;
+            top: 0; 
             left: 0;
-            width: 100%;
+            width: 100%; 
             height: 100%;
-            z-index: -1; 
+            z-index: 0; /* 放底层 */
+            pointer-events: none; /* 关键！让鼠标穿透背景 */
         }
 
-        /* 2. 内容层 (放在中间层 10) */
+        /* 2. 内容层 */
         .content {
             position: absolute;
-            top: 50%;
+            top: 50%; 
             left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
             width: 100%;
-            z-index: 10;
+            z-index: 10; /* 放中间 */
         }
 
         h1 { 
-            font-size: 4rem; 
-            margin-bottom: 10px; 
+            font-size: 4.5rem; 
+            margin-bottom: 0px; 
             color: #fff; 
-            text-shadow: 0 0 20px var(--accent);
-            letter-spacing: 2px;
-            pointer-events: none; /* 让鼠标经过文字时不变成光标 */
+            text-shadow: 0 0 25px var(--accent);
+            letter-spacing: 3px;
+            font-weight: 800;
         }
         
         .subtitle {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: #94a3b8;
-            margin-bottom: 60px; /* 增加一点距离，防止误触 */
-            pointer-events: none;
+            margin-bottom: 60px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
-        /* 3. 按钮 (放在最顶层 9999，绝对能点！) */
+        /* 3. 修复：按钮层级最高，且鼠标手型强制显示 */
         .action-btn { 
-            position: relative; /* 确保 z-index 生效 */
-            z-index: 9999; 
-            background: rgba(56, 189, 248, 0.1); 
+            position: relative;
+            z-index: 10000; /* 放在最顶层！ */
+            background: rgba(0,0,0,0.6); 
             border: 2px solid var(--accent);
             color: var(--accent); 
-            padding: 15px 50px; 
+            padding: 18px 60px; 
             border-radius: 50px; 
             text-decoration: none; 
             font-weight: bold; 
@@ -69,99 +62,17 @@
             transition: 0.3s;
             text-transform: uppercase;
             letter-spacing: 2px;
-            backdrop-filter: blur(5px);
-            cursor: pointer; /* 强制显示手型光标 */
+            cursor: pointer; /* 强制显示小手 */
             display: inline-block;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
         }
 
         .action-btn:hover { 
             background: var(--accent); 
             color: #000;
-            box-shadow: 0 0 30px var(--accent); 
-            transform: scale(1.05); /* 悬停时稍微放大 */
+            box-shadow: 0 0 50px var(--accent); 
+            transform: scale(1.05);
         }
 
         .footer {
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
-            text-align: center;
-            color: #475569;
-            font-size: 0.8rem;
-            z-index: 10;
-        }
-    </style>
-</head>
-<body>
-
-    <div id="canvas-container"></div>
-
-    <div class="content">
-        <h1>AI NEXUS</h1>
-        <p class="subtitle">Access the Ultimate Student Toolkit</p>
-        <a href="toolkit.html" class="action-btn">Initialize System</a>
-    </div>
-
-    <div class="footer">Built with Three.js | 2026</div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
-    <script>
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-        const geometry = new THREE.BufferGeometry();
-        const particlesCount = 1200;
-        const posArray = new Float32Array(particlesCount * 3);
-
-        for(let i = 0; i < particlesCount * 3; i++) {
-            posArray[i] = (Math.random() - 0.5) * 15; 
-        }
-
-        geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-        const material = new THREE.PointsMaterial({
-            size: 0.02,
-            color: 0x38bdf8,
-            transparent: true,
-            opacity: 0.8
-        });
-
-        const particlesMesh = new THREE.Points(geometry, material);
-        scene.add(particlesMesh);
-
-        camera.position.z = 3;
-
-        let mouseX = 0;
-        let mouseY = 0;
-
-        document.addEventListener('mousemove', (event) => {
-            mouseX = event.clientX / window.innerWidth - 0.5;
-            mouseY = event.clientY / window.innerHeight - 0.5;
-        });
-
-        const clock = new THREE.Clock();
-
-        function animate() {
-            const elapsedTime = clock.getElapsedTime();
-            particlesMesh.rotation.y = elapsedTime * 0.05;
-            particlesMesh.rotation.x = elapsedTime * 0.02;
-            particlesMesh.rotation.y += mouseX * 0.5;
-            particlesMesh.rotation.x += mouseY * 0.5;
-            renderer.render(scene, camera);
-            window.requestAnimationFrame(animate);
-        }
-
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
-</body>
-</html>
+            position: fixed; bottom: 20px; width: 100%; text-align: center; color: #475569; font-size
